@@ -18,6 +18,7 @@ render_template:
     - MESSAGE="$(git --no-pager log -1 --pretty=%B)"
     # Evil git magic, to keep all files, but switch the branch
     - git fetch origin
+    - git branch compiled/latest origin/compiled/latest
     - git symbolic-ref HEAD refs/heads/compiled/latest
     - git reset
     - git status
