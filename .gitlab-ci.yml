@@ -21,8 +21,6 @@ render_template:
     - git branch --force compiled/latest origin/compiled/latest
     - git symbolic-ref HEAD refs/heads/compiled/latest
     - git reset
-    - git status
-    - git rev-parse HEAD
     # Create the commit and update the branches
     - git add pack_packer.yml
     - 'git -c "user.name=GitLab CI" -c "user.email=gitlab-runner_$CI_RUNNER_SHORT_TOKEN@$CI_SERVER_HOST" commit --allow-empty --author="$AUTHOR" -m "$VERSION: $MESSAGE"'
