@@ -1,3 +1,13 @@
-# Just a dummy file for now
-test: |
-  @pack_packer.sh@
+# Define a template job
+.pack_pack:
+  script:
+    - |
+      @pack_packer.sh@
+  artifacts:
+    paths:
+      - '*.zip'
+  cache:
+    - key: "CompressionCache"
+      paths:
+        - .cache
+      policy: pull-push
