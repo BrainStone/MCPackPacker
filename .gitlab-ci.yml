@@ -33,3 +33,4 @@ render_template:
     - git push --all --follow-tags push_origin -o ci.skip
   except:
     - compiled/*
+    - tags
