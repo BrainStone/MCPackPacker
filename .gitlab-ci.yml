@@ -13,7 +13,7 @@ render_template:
     # Render template
     - ./render_template.sh pack_packer.template.yml > pack_packer.yml
     # Fetch info about the current commit
-    - VERSION="$(git --no-pager describe --tags --match 'v[0-9]*' | awk -F'-' '{ if (NF > 1) printf "%s.%s\n", $1, $2; else print $1 }')"
+    - VERSION="$(git --no-pager describe --tags --match 'v[0-9]*' --always | awk -F'-' '{ if (NF > 1) printf "%s.%s\n", $1, $2; else print $1 }')"
     - AUTHOR="$(git --no-pager show -s --format='%an <%ae>')"
     - MESSAGE="$(git --no-pager log -1 --pretty=%B)"
     # Evil git magic, to keep all files, but switch the branch
@@ -30,11 +30,8 @@ render_template:
     # Push
     - git remote remove push_origin || true
     - git remote add push_origin "$CI_REPOSITORY_URL"
-    - git push --all --follow-tags push_origin -o ci.skip
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^refs\/tags\//'
-      when: never
-    - if: '$CI_COMMIT_REF_NAME =~ /^compiled\//'
-      when: never
-    - when: on_success
+    - git push --all --follow-tags push_origin -o ci.skip --force
+  except:
+    - compiled/*
+    - tags
 
