@@ -1,2 +1,3 @@
 # Just a dummy file for now
-foo: bar
+test: |
+  @pack_packer.sh@
