@@ -7,6 +7,8 @@ render_template:
   tags:
     - linux
     - shell
+  variables:
+    GIT_DEPTH: 0
   script: 
     # TODO: Actually render out the template
     - cp pack_packer.template.yml pack_packer.yml
@@ -15,6 +17,7 @@ render_template:
     - AUTHOR="$(git --no-pager show -s --format='%an <%ae>')"
     - MESSAGE="$(git --no-pager log -1 --pretty=%B)"
     # Evil git magic, to keep all files, but switch the branch
+    - git fetch origin
     - git symbolic-ref HEAD refs/heads/compiled/latest
     - git reset
     # Create the commit and update the branches
