@@ -69,6 +69,12 @@ function cache() {
 	fi
 }
 
+function command_exists() {
+	if command -v "$1" &>/dev/null; then
+		echo 1
+	fi
+}
+
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
 	print_help
 	exit
@@ -88,6 +94,12 @@ fi
 base_folder="$1"
 result_file="$2"
 [[ "$optimize" ]] || result_file="${result_file/\.zip/_DEV.zip}"
+
+# Detect installed tools
+jq_installed="$(command_exists jq)"
+ffmpeg_installed="$(command_exists ffmpeg)"
+oxipng_installed="$(command_exists oxipng)"
+optipng_installed="$(command_exists optipng)"
 
 # Shell options starting here
 set -e
@@ -123,12 +135,15 @@ while IFS= read -r -u3 -d '' source_file; do
 			cat "$source_file"
 			echo
 		) | sed -E '/^(\s*$|#)/d' | head -c-1 >"$target_file"
-	elif [[ "$optimize" && "$source_file" =~ .*\.(json|mcmeta)$ ]]; then
+	elif [[ "$optimize" && "$jq_installed" && "$source_file" =~ .*\.(json|mcmeta)$ ]]; then
 		jq -c . "$source_file" >"$target_file"
-	elif [[ "$optimize" && "$source_file" =~ .*\.ogg$ ]]; then
+	elif [[ "$optimize" && "$ffmpeg_installed" && "$source_file" =~ .*\.ogg$ ]]; then
 		cache ogg_v1 "$source_file" "$target_file" \
 			ffmpeg -hide_banner -loglevel error -y -i "$source_file" -c:a libopus -b:a 32k -ar 48000 -ac 2 -application audio -map_metadata -1 -flags:a +bitexact "$target_file"
-	elif [[ "$optimize" && "$source_file" =~ .*\.png$ ]]; then
+	elif [[ "$optimize" && "$oxipng_installed" && "$source_file" =~ .*\.png$ ]]; then
+		cache png_v2 "$source_file" "$target_file" \
+			oxipng --quiet -o max --fast --zopfli --strip safe --out "$target_file" -- "$source_file"
+	elif [[ "$optimize" && "$optipng_installed" && "$source_file" =~ .*\.png$ ]]; then
 		cache png_v1 "$source_file" "$target_file" \
 			optipng -quiet -o7 -zm1-9 -strip all -out "$target_file" -- "$source_file"
 	else
