@@ -112,9 +112,6 @@ set -e
 set -o pipefail
 shopt -s globstar
 
-# Ensure we're working relative to the script
-cd "$(dirname "${BASH_SOURCE[0]}")"
-
 # Cleanup the last build if it still exists. The folder will be recreated in the loop
 rm -rf .build "$result_file"
 
