@@ -95,16 +95,23 @@ base_folder="$1"
 result_file="$2"
 [[ "$optimize" ]] || result_file="${result_file/\.zip/_DEV.zip}"
 
+if [[ ! -d "$base_folder" ]]; then
+    echo "ERROR: Pack folder $base_folder doesn't exist!"
+    exit 1
+fi 
+
 # Detect installed tools
 jq_installed="$(command_exists jq)"
 ffmpeg_installed="$(command_exists ffmpeg)"
 oxipng_installed="$(command_exists oxipng)"
 optipng_installed="$(command_exists optipng)"
+advzip_installed="$(command_exists advzip)"
 
 if [[ "$optimize" ]]; then
 	[[ "$jq_installed" ]] || echo "WARNING: jq is not installed! Cannot optimize JSON files!"
 	[[ "$ffmpeg_installed" ]] || echo "WARNING: ffmpeg is not installed! Cannot optimize OGG files!"
 	[[ "$oxipng_installed" || "$optipng_installed" ]] || echo "WARNING: neither oxipng, nor optipng is not installed! Cannot optimize PNG files!"
+	[[ "$advzip_installed" ]] || echo  "WARNING: advzip is not installed! Cannot recompress final zip!"
 fi
 
 # Shell options starting here
@@ -237,7 +244,7 @@ echo -en "\nCompressing files..."
 zip -9rq "../$result_file" .
 echo -e "\b\b\b DONE!"
 
-if [[ "$optimize" ]]; then
+if [[ "$optimize" && "$advzip_installed" ]]; then
 	cd ..
 
 	echo -en "\nRecompressing ${result_file}..."
