@@ -1,0 +1,6 @@
+# Just a dummy file for now
+test: |
+  #!/usr/bin/env bash
+  
+  # Dummy file for now
+  echo "Hello World!"
