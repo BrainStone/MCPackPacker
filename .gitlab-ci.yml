@@ -19,7 +19,7 @@ render_template:
     - git reset
     # Create the commit and update the branches
     - git add pack_packer.yml
-    - 'git commit --allow-empty -m "$VERSION: $MESSAGE"'
+    - 'git commit --allow-empty --author="$AUTHOR" -m "$VERSION: $MESSAGE"'
     - git tag -a "compiled/$VERSION" -m "Version $VERSION"
     - git branch --force "compiled/${VERSION%.*}" HEAD
     - git branch --force "compiled/${VERSION%%.*}" HEAD
