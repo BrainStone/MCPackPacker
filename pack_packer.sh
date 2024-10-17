@@ -101,6 +101,12 @@ ffmpeg_installed="$(command_exists ffmpeg)"
 oxipng_installed="$(command_exists oxipng)"
 optipng_installed="$(command_exists optipng)"
 
+if [[ "$optimize" ]]; then
+	[[ "$jq_installed" ]] || echo "WARNING: jq is not installed! Cannot optimize JSON files!"
+	[[ "$ffmpeg_installed" ]] || echo "WARNING: ffmpeg is not installed! Cannot optimize OGG files!"
+	[[ "$oxipng_installed" || "$optipng_installed" ]] || echo "WARNING: neither oxipng, nor optipng is not installed! Cannot optimize PNG files!"
+fi
+
 # Shell options starting here
 set -e
 set -o pipefail
