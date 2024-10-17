@@ -24,3 +24,4 @@ render_template:
     - git tag -a "compiled/$VERSION" -m "Version $VERSION"
     - git branch --force "compiled/${VERSION%.*}" HEAD
     - git branch --force "compiled/${VERSION%%.*}" HEAD
+    - git push --follow-tags
