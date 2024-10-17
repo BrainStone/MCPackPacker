@@ -1,6 +1,22 @@
-# Just a dummy file for now
-test: |
-  #!/usr/bin/env bash
-  
-  # Dummy file for now
-  echo "Hello World!"
+# Allow other jobs to tap into the cache as well
+.pack_packer_cache:
+  cache:
+    - key: "pack_packer-compression_cache"
+      paths:
+        - .cache
+      policy: pull-push
+
+# Define a template job
+.pack_pack:
+  extends:
+    - .pack_packer_cache
+  script:
+    - |
+      set -- $([[ $dev == true ]] && printf -- %s --dev) "$folder" "$output"
+      #!/usr/bin/env bash
+      
+      # Dummy file for now
+      echo "Hello World!"
+  artifacts:
+    paths:
+      - '*.zip'
