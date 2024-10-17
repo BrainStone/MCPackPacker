@@ -25,6 +25,7 @@ render_template:
     - git branch --force "compiled/${VERSION%.*}" HEAD
     - git branch --force "compiled/${VERSION%%.*}" HEAD
     # Push
+    - git remote remove push_origin || true
     - git remote add push_origin "$CI_REPOSITORY_URL"
     - git push --all push_origin -o ci.skip
   except:
