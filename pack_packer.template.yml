@@ -1,13 +1,19 @@
+# Allow other jobs to tap into the cache as well
+.pack_packer_cache:
+  cache:
+    - key: "pack_packer-compression_cache"
+      paths:
+        - .cache
+      policy: pull-push
+
 # Define a template job
 .pack_pack:
+  extends:
+    - .pack_packer_cache
   script:
     - |
+      set -- $([[ $dev == true ]] && printf -- %s --dev) "$folder" "$output"
       @pack_packer.sh@
   artifacts:
     paths:
       - '*.zip'
-  cache:
-    - key: "CompressionCache"
-      paths:
-        - .cache
-      policy: pull-push
