@@ -1,5 +1,8 @@
 # Allow other jobs to tap into the cache as well
 .pack_packer_cache:
+  tags:
+    - linux
+    - shell
   cache:
     - key: "pack_packer-compression_cache"
       paths:
