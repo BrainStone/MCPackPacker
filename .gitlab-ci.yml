@@ -1,0 +1,26 @@
+stages:
+  - build
+
+render_template:
+  stage: build
+  needs: [ ]
+  tags:
+    - linux
+    - shell
+  script: 
+    # TODO: Actually render out the template
+    - cp pack_packer.template.yml pack_packer.yml
+    # Fetch info about the current commit
+    - VERSION="$(git --no-pager describe --tags --match 'v[0-9]*' | awk -F'-' '{ if (NF > 1) printf "%s.%s\n", $1, $2; else print $1 }')"
+    - AUTHOR="$(git --no-pager show -s --format='%an <%ae>')"
+    - MESSAGE="$(git --no-pager log -1 --pretty=%B)"
+    # Evil git magic, to keep all files, but switch the branch
+    - git checkout --detach
+    - git reset compiled/latest
+    - git checkout compiled/latest
+    # Create the commit and update the branches
+    - git add pack_packer.yml
+    - 'git commit -allow-empty -m "$VERSION: $MESSAGE"'
+    - git tag -a "compiled/$VERSION" -m "Version $VERSION"
+    - git branch --force "compiled/${VERSION%.*}" HEAD
+    - git branch --force "compiled/${VERSION%%.*}" HEAD
