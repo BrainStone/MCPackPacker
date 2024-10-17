@@ -26,7 +26,7 @@ function calc_percent_reduction() {
 	local formatted_change
 
 	if [[ "$original_size" -eq 0 ]]; then
-		formatted_change="-inf"
+		formatted_change="+inf"
 	elif [[ "$new_size" -eq "$original_size" ]]; then
 		formatted_change="±0.00"
 	else
