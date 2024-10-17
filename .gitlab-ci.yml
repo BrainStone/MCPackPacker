@@ -11,7 +11,7 @@ render_template:
     GIT_DEPTH: 0
   script: 
     # Render template
-    - ./render_template.sh pack_packer.template.yml
+    - ./render_template.sh pack_packer.template.yml > pack_packer.yml
     # Fetch info about the current commit
     - VERSION="$(git --no-pager describe --tags --match 'v[0-9]*' | awk -F'-' '{ if (NF > 1) printf "%s.%s\n", $1, $2; else print $1 }')"
     - AUTHOR="$(git --no-pager show -s --format='%an <%ae>')"
