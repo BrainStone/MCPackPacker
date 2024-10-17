@@ -15,9 +15,8 @@ render_template:
     - AUTHOR="$(git --no-pager show -s --format='%an <%ae>')"
     - MESSAGE="$(git --no-pager log -1 --pretty=%B)"
     # Evil git magic, to keep all files, but switch the branch
-    - git checkout --detach
-    - git reset compiled/latest
-    - git checkout compiled/latest
+    - git symbolic-ref HEAD refs/heads/compiled/latest
+    - git reset
     # Create the commit and update the branches
     - git add pack_packer.yml
     - 'git commit -allow-empty -m "$VERSION: $MESSAGE"'
