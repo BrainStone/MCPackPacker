@@ -21,9 +21,11 @@ render_template:
     - git add pack_packer.yml
     - 'git commit --allow-empty --author="$AUTHOR" -m "$VERSION: $MESSAGE"'
     # Tag and mark all versions
-    - git tag -a "compiled/$VERSION" -m "Version $VERSION"
+    - git tag -a "compiled/$VERSION" -m "Version $VERSION" --force
     - git branch --force "compiled/${VERSION%.*}" HEAD
     - git branch --force "compiled/${VERSION%%.*}" HEAD
     # Push
     - git remote add push_origin "$CI_REPOSITORY_URL"
     - git push --all push_origin -o ci.skip
+  except:
+    - compiled/*
