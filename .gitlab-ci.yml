@@ -29,9 +29,7 @@ render_template:
     - git branch --force "compiled/${VERSION%.*}" HEAD
     - git branch --force "compiled/${VERSION%%.*}" HEAD
     # Push
-    - git remote remove push_origin || true
-    - git remote add push_origin "$CI_REPOSITORY_URL"
-    - git push --all --follow-tags push_origin
+    - git push --all --follow-tags origin
   except:
     - compiled/*
     - tags
