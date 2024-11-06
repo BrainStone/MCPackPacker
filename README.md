@@ -11,11 +11,11 @@ include:
     file: 'pack_packer.yml'
 
 create_resource_pack:
-	stage: build
-	extends:
-		- .pack_pack
-	variables:
-		folder: resources
-		output: Dummy.resources.zip
+  stage: build
+  extends:
+    - .pack_pack
+  variables:
+    folder: resources
+    output: Dummy.resources.zip
 
 ```
